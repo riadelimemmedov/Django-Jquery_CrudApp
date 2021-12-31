@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block scripts %}
+    <script src="{% static 'posts_proj/main.js' %}" defer></script><!--defer lengidir texire salirt yeni biriinci jqueryler islesin sonra main.js islesin,defer sayesinde-->
+{% endblock scripts %}
+
+{% block title %}
+    Post
+{% endblock title %}
+
+{% block content %}
+    
+<body style="background-color: #dfe6e9 !important;">
+
+    <!-- Button trigger modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <!--?Create Post with js and ajax,yeni forma submit eventi yazib icinede ajax yazib POST request ataciyig-->
+                    <form id="model-footer"><!-- burda method bildirmemekdeki sebeb js terefinden ajaxlar post request ataciyig bu formu alib zaten 2 defe yazmag menasizdir-->
+                        {% csrf_token %}
+                        <!--{{form.as_p}} formdan getirir ele bil -->
+                        {{form|crispy}}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Create</button><!-- eger form icinde melumat gondermek ucun buton istifade edirsense onda butonun type i submit olmalidir -->
+                        </div>
+                    </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Eger bele bir mesajin olub olmamagini yoxlamag isteyirnsense if sertlerinden istifade et -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}}" id="mesajqutusu">
+                <strong>{{message}}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div id="alert-box">
+
+    </div>
+
+    <button type="button" class="btn btn-info mb-2 shadow" data-bs-toggle="modal" data-bs-target="#addPostModal">
+        Add Post
+    </button>
+
+
+    <div id="posts-box">
+            
+    </div>
+
+    <div id="spinner-box" class="text-center mb-2">
+        <div class="spinner-border" role="status">
+                
+        </div>
+    </div>
+
+    <div class="text-center mb-3" id="end-box">
+        <button type="submit" class="btn btn-warning btn-lg btn-block text-dark font-weight-bold" style="font-weight: bold;"  id="load-btn">Load More</button>
+    </div>
+
+    
+    </body>
+
+    <script>
+        setTimeout(function() {
+            $('#mesajqutusu').hide('slow')
+        },1000)
+    </script>
+
+{% endblock content %}

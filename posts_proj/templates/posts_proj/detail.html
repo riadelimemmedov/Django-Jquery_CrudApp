@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block scripts %}
+    <script src="{% static 'posts_proj/detail.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block title %}
+    {{obj.title}} detail
+{% endblock title %}
+
+{% block content %}
+
+<!-- !Update Modal-->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div id="alert-box">
+
+                </div>
+
+                <!--?Create Post with js and ajax,yeni forma submit eventi yazib icinede ajax yazib POST request ataciyig-->
+                <form id="update-form"><!-- burda method bildirmemekdeki sebeb js terefinden ajaxlar post request ataciyig bu formu alib zaten 2 defe yazmag menasizdir-->
+                    {% csrf_token %}
+                    <!--{{form.as_p}} formdan getirir ele bil -->
+                    {{form|crispy}}<!-- bularin icinde gonderilen forma uygun html formlari yaradilir input,select ve s-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Update</button><!-- eger form icinde melumat gondermek ucun buton istifade edirsense onda butonun type i submit olmalidir -->
+                    </div>
+                </form>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- !Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!--Model Body-->
+            <div class="modal-body">
+                <span class="text-muted">Are You Sure Want To Delete ? <b class="text-dark">{{obj.title}}</b></span>
+
+                <!--?Create Post with js and ajax,yeni forma submit eventi yazib icinede ajax yazib POST request ataciyig-->
+            </div>
+            
+            <!--Modal Footer-->
+            <div class="model-footer">
+                <form id="delete-form"><!-- burda method bildirmemekdeki sebeb js terefinden ajaxlar post request ataciyig bu formu alib zaten 2 defe yazmag menasizdir-->
+                    {% csrf_token %}
+                    <!--{{form.as_p}} formdan getirir ele bil -->
+                    <!--  {{form|crispy}}bularin icinde gonderilen forma uygun html formlari yaradilir input,select ve s-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button><!-- eger form icinde melumat gondermek ucun buton istifade edirsense onda butonun type i submit olmalidir -->
+                    </div>
+                </form>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+    <!-- !Eger djangodaki url faylina app_name vermisense onda url cagranda app_name istifade etmeyi unutma,app_name:urlname seklinde olur syntax -->
+    <!-- <a href="{% url 'posts:main-board' %}" id="back-btn" class="btn btn-info">Back</a> -->
+    <button id="back-btn" class="btn btn-info">Back</button>
+    <button id="update-btn" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+    <button id="delete-btn" class="btn btn-danger d-none" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+
+    
+    <div id="spinner-box" class="text-center mb-2">
+        <div class="spinner-border" role="status">
+                
+        </div>
+    </div>
+
+    <div class="mt-2" id="post-box-detail">
+
+    </div>
+
+{% endblock content %}
