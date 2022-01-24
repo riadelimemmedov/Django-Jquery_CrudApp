@@ -1,6 +1,6 @@
-//!Gonderilen ID li seyfenin detailini gosterir
+//!Detail Js
 
-console.log('Detail Seyfesinden reaksiya verirem')
+console.log('Detail Page')
 
 const postBox = document.getElementById('post-box-detail')
 const backBtn = document.getElementById('back-btn')
@@ -9,11 +9,11 @@ const spinnerBox = document.getElementById('spinner-box')
 const updateBtn = document.getElementById('update-btn')
 const deleteBtn = document.getElementById('delete-btn')
 
-//*Crispy formdan gelen inputlar
+//*Crispy For Input
 const titleInput = document.getElementById('id_title')
-const bodyInput = document.getElementById('id_body')//bunlar crispy formlara aiddir 
+const bodyInput = document.getElementById('id_body')
 
-//*Update ve Delete formuna aid olanlar
+//*Update ve Delete Form
 const updateUrl = window.location.href + "update/"
 const deleleUrl = window.location.href + "delete/"
 
@@ -22,16 +22,13 @@ const deleteForm = document.getElementById('delete-form')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
 
-//?Js ile ozunden evvelki url getmek isteyirsense onda history.back() den istifade et
 
 backBtn.addEventListener('click',() => {
-    history.back()//yeni evvelki seyfeye qayit hansisa girmisense,history.back() vasitesile
+    history.back()
 })
 
-//ele window.location.href yazsam oldugum hemin id li seyfeni gosterecek
-// console.log(window.location.href)
 
-//!Ajax Js GET request yeni data cekirem
+//!Ajax Js GET request 
 console.log(window.location.href)
 
 
@@ -45,7 +42,7 @@ $.ajax({
         if(data.logged_in !== data.author){
             console.log('Different')
         }
-        else{//yeni postu yazan insan giris eden istifadeciye beraberdirse eger
+        else{
             updateBtn.classList.remove('d-none')
             deleteBtn.classList.remove('d-none')
         }
@@ -82,13 +79,11 @@ updateForm.addEventListener('submit',e => {
         type:'POST',
         url : updateUrl,
         data:{
-            //yeni inputdan giren deyerleri alirig
             'csrfmiddlewaretoken':csrf[0].value,
             'title':titleInput.value,
             'body':bodyInput.value
         },
         success : function(response){
-            // console.log('Update Response', response)
             handleAlerts('success','Post Has Been Updated')
             title.textContent = response.title
             body.textContent = response.body

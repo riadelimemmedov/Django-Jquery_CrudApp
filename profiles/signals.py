@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import Profile
 from django.dispatch import receiver
 
-@receiver(post_save,sender=User)#yeni USER modeli gonderilecek ve avtomatik Profile yaranacag,yeniki biz hesab acan kimi bize bir Profil verecek
+@receiver(post_save,sender=User)
 def post_save_create_profile(sender,instance,created,*args,**kwargs):
     print('Sender ', sender)
     print('Instance ', instance)

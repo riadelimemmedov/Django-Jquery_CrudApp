@@ -1,6 +1,3 @@
-//!POST_PROK fayli icinde main.js
-//?Yadda saxla bir defelikki,bir js faylinda istediyin qeder isteyin bir url e ayri ayrligda AJAX yaza bilersen
-
 console.log('Main Page');
 
 // const helloWorldBox = document.getElementById('hello-world')
@@ -15,25 +12,11 @@ const crispyBody = document.getElementById('id_body')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
 const alertBox = document.getElementById('alert-box')
-const homeUrl = window.location.href//yeni oldugum seyfedeki url i mene geri donder,window.location.url vasitesile
-// console.log(`${homeUrl}2`)
-
-//!Ana Seyfe Ajax
-
-// $.ajax({
-//     type: 'GET',
-//     url : '/hello-world/',
-//     success : function(response) {
-//         helloWorldBox.textContent = `${response.text}`
-//     },
-//     error : function(err){
-//         console.log('Error', err)
-//     }
-// })
+const homeUrl = window.location.href
 
 
-//!Ajax csrftoke
-const getCookie = (name) => {//js de funksiyalari deyisken kimi tanimlamag mumkundur
+//!Ajax csrftoken
+const getCookie = (name) => {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
@@ -50,13 +33,13 @@ const getCookie = (name) => {//js de funksiyalari deyisken kimi tanimlamag mumku
 }
 const csrftoken = getCookie('csrftoken');
 
-
+//!Like and Unlike with Ajax
 const likeUnlikePosts = () => {
     const likeUnlikeForms = [...document.getElementsByClassName('like-unlike-forms')]
-    likeUnlikeForms.forEach(el=>{//yeni formlari alirig ve forEach ile gezirik icinde bir-bir
-        el.addEventListener('submit',e=>{//submit form taginin ozune yazilir ele
+    likeUnlikeForms.forEach(el=>{
+        el.addEventListener('submit',e=>{
             e.preventDefault()
-            const clickedId = e.target.getAttribute('data-form-id')//yeni form tagi icinde tiklanan yerlerden data-form-id olan html attributena get,ele bilki her forma ayri bir id verdik
+            const clickedId = e.target.getAttribute('data-form-id')
             const clickedBtn = document.getElementById(`like-unlike-${clickedId}`)
 
 
@@ -68,8 +51,8 @@ const likeUnlikePosts = () => {
                     'pk':clickedId
                 },
                 success:function(response){
-                    console.log('Ugurlu ', response)
-                    clickedBtn.textContent = response.likedBtn ? `Unlike ${response.count}` : `Like : ${response.count}`// Js de ? if,: else bildirir
+                    console.log('Success ', response)
+                    clickedBtn.textContent = response.likedBtn ? `Unlike ${response.count}` : `Like : ${response.count}`
                 },
                 error:function(err){
                     console.log('Error',err)
@@ -80,19 +63,14 @@ const likeUnlikePosts = () => {
 }
 
 
-//!Postlari Cekmek Ucun Yazilan Ajax
-let visible = 3//buna bir buton yazaciyig her butona basanda bunun deyeri deyisecek,yeni baslangicda ilk 3 postu gostermek ucun biz visibleye 3 verdik her butona abasanda bu += 3 artacag ve post un id si kimi viewa gonderilecek
+//!Post GET with Ajax
+let visible = 3
 
 const getData = () =>{
     $.ajax({
         type:'GET',
         url:`/data/${visible}/`,
-        success:function(response) {
-            //responseden donnen deyer JSON oldugu ucun onu JSON.parse ile cevir ,eger post atirsansa onda json.strintgyden istifade et
-            // const data = JSON.parse(response.data)
-            // console.log(data)
-            
-            //?Ikinci Bir Yol
+        success:function(response) {            
             const data = response.data
             setTimeout(()=>{
             data.forEach(el => {
@@ -125,8 +103,7 @@ const getData = () =>{
                 spinnerBox.classList.add('d-none')
             })
             },500)
-            // console.log(response.size)
-            if(response.size === 0){//eger post yoxdursa
+            if(response.size === 0){
                 endBox.textContent = 'No Posts Added Yet...'
             }
             else if(response.size <= visible){
@@ -141,12 +118,10 @@ const getData = () =>{
 
 loadBtn.addEventListener('click',()=>{
     loadBtn.classList.add('shadow')
-    spinnerBox.classList.remove('d-none')//yeni click olanda spinner box gorunen olsun
+    spinnerBox.classList.remove('d-none')
     visible += 3
     getData()
 })
-
-//ve sonra yeniden funksiyani cagirmag lazim olur
 getData()
 
 
@@ -154,7 +129,7 @@ modelFooter.addEventListener('submit',e => {
     e.preventDefault()
     $.ajax({
         type: 'POST',
-        url : '',//localhost http://127.0.0.1:8000/ bu url di deye '' formadada yazilsa olar
+        url : '',
         data : {
             'csrfmiddlewaretoken':csrf[0].value,
             'title':crispyTitle.value,
@@ -162,8 +137,7 @@ modelFooter.addEventListener('submit',e => {
         },
         success : function(response){
             console.log('Succesee Post Request ', response)
-            //yeni postBoxda 2 defe innerHtml in tekrarlanmasinin qarsini qalmag ucun bele yazildi
-            postsBox.insertAdjacentHTML('afterbegin',//yeni diger postlarin davami ile elave edecek POST reqeust atilan POST ile GET requestden gelen postlari birlesdidrir
+            postsBox.insertAdjacentHTML('afterbegin',
             `
             <div class="card mb-4">
             
@@ -190,11 +164,9 @@ modelFooter.addEventListener('submit',e => {
             `
             )
             likeUnlikePosts()
-            //eger modali gizletmek isteyirnsese boostrap icindeki jquery kodlarini istifade ede bilersen
             $('#addPostModal').modal('hide')
             handleAlerts('success','New Post Added')
-            //!formu sifirlamag ucun yazilan formu tapib .reset() funksiyani istifade etmek lazimdir
-            modelFooter.reset()//reset() vasitesile formu sifirlayirig ele bil
+            modelFooter.reset()
         },
         error : function(err){
             handleAlerts('danger','Something went wrong')

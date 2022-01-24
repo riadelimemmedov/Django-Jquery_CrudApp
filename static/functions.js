@@ -1,4 +1,4 @@
-//!Xeta mesajlarinin yazilmasi ucun istifade olunann js fayli
+//!Error Message
 
 const handleAlerts = (type,text) =>{
     alertBox.innerHTML = `

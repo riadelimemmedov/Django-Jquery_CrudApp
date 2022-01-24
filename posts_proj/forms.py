@@ -2,7 +2,7 @@ from django import forms
 from django.forms import fields
 from .models import Post
 
-class PostForm(forms.ModelForm):#eger forms.Form yazsaydim onda sifirdan bir form yaradilir
+class PostForm(forms.ModelForm):
     # title = forms.CharField(widget=forms.TextInput(attrs={
     #     'class':'form-control',
     # }))
